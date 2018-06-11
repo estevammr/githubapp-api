@@ -1,6 +1,6 @@
 defmodule GithubappWeb.AppController do
   use GithubappWeb, :controller
-
+  alias Githubapp.GitHub.Repo
   alias Githubapp.GitHub
   alias Githubapp.GitHub.App
 
@@ -9,10 +9,29 @@ defmodule GithubappWeb.AppController do
   action_fallback GithubappWeb.FallbackController
 
   def index(conn, %{"language" => language}) do
-    gits = Githubapp.search_repo(language)    
-    teste = Enum.at(gits, 1)
-    teste2 = Enum.each(teste, fn(x) -> IO.puts x end) |> IO.inspect
-    render(conn, "index.json", gits: gits)
+    gits = Githubapp.search_repo(language) 
+    
+    items = gits["items"]  
+    result = Enum.map(items, fn item -> %{
+      clone_url: item["clone_url"],
+      full_name: item["full_name"],
+      node_id: item["node_id"],
+      name: item["name"],
+      git_url: item["git_url"],
+      score: item["score"],
+      homepage: item["homepage"],
+      forks: item["forks"],
+      stargazers_count: item["stargazers_count"],
+      languages_url: item["languages_url"]
+    } end) 
+    
+    repo = result 
+      |> Enum.chunk(2) 
+      |> Enum.map(fn [a, b] -> {a, b} end) 
+      |> Map.new
+      |> IO.inspect
+    GitHub.create_app(repo)
+    render(conn, "index.json", result: result)
   end
 
   def create(conn, %{"app" => app_params}) do

@@ -20,7 +20,5 @@ defmodule Githubapp.GitHub.App do
   @doc false
   def changeset(app, attrs) do
     app
-    |> cast(attrs, [:clone_url])
-    |> validate_required([:clone_url])
   end
 end
