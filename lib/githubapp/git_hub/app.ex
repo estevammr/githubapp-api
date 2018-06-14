@@ -17,8 +17,11 @@ defmodule Githubapp.GitHub.App do
     timestamps()
   end
 
-  @doc false
-  def changeset(app, attrs) do
+  @required_fields ~w(clone_url full_name node_id)
+  @optional_fields ~w()
+
+  def changeset(app, params \\ :empty) do
     app
+    #|> cast(params, @required_fields, @optional_fields)
   end
 end

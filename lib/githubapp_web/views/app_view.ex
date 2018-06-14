@@ -3,7 +3,7 @@ defmodule GithubappWeb.AppView do
   alias GithubappWeb.AppView
 
   def render("index.json", %{result: result}) do
-    %{data: result}
+    result
   end
 
   def render("show.json", %{app: app}) do

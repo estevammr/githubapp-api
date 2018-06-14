@@ -35,6 +35,8 @@ defmodule GithubappWeb.Endpoint do
     key: "_githubapp_key",
     signing_salt: "wamPFjLE"
 
+  plug CORSPlug
+  
   plug GithubappWeb.Router
 
   @doc """
